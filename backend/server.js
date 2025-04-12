@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(helmet());
-app.use(cors({origin: "http://localhost:5173",credentials:true}));
+app.use(cors({origin: "https://student-protal-29c2.vercel.app",credentials:true}));
 app.use(morgan("dev"));
 
 
