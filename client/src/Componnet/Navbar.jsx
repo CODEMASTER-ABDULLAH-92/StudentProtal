@@ -11,8 +11,6 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 const token =  Cookies.get("accessToken");
-console.log(token);
-
   const logout = async () => {
     try {
       const response = await axios.post(
@@ -28,8 +26,6 @@ console.log(token);
       console.error("Error in Logout:", error);
     }
   };
-
-  
   return (
     <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
