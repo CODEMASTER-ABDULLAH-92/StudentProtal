@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  url : "http://localhost:8001"
+  url : "https://student-protal-b.vercel.app/"
 }
 
 export const counterSlice = createSlice({
