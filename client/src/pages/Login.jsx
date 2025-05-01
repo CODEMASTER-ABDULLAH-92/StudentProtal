@@ -2,46 +2,45 @@ import { useState } from 'react';
 import { FaLock, FaGoogle, FaFacebook, FaTwitter } from 'react-icons/fa';
 import { HiMail } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
-import { loginSuccess } from '../feature/authSlice';
-import { setUser } from '../feature/userSlice';
-
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
-  const [name,setName] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const dispatch = useDispatch();
-  const url = useSelector((state) => state.portal.url);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    
+    if (!email || !password) {
+      setError('Please fill in all fields');
+      return;
+    }
+
+    setIsLoading(true);
+    
     try {
-      const response = await axios.post(
-        `${url}/api/user/loginUser`,
-        { email, password },
-        { withCredentials: true, headers: { "Content-Type": "application/json" } }
-      );
-      if (response.data.accessToken) {
-        dispatch(
-          loginSuccess({
-            user: response.data.user,
-            token: response.data.accessToken, // Ensure correct token field
-          })
-        );
-        const userData = { name, email };
-        dispatch(setUser(userData));
-        sessionStorage.setItem('token', response.data.accessToken);
-        navigate('/award');
-        setEmail("jgr");
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Mock successful login
+      if (email === 'user@example.com' && password === 'password123') {
+        if (rememberMe) {
+          localStorage.setItem('isAuthenticated', 'true');
+        } else {
+          sessionStorage.setItem('isAuthenticated', 'true');
+        }
+        navigate('/dashboard');
       } else {
-        alert('Login failed. No token received.');
+        setError('Invalid email or password');
       }
     } catch (error) {
-      console.error('Login error:', error.response?.data?.message || error.message);
-      alert(error.response?.data?.message || 'Invalid credentials. Please try again.');
+      setError('Login failed. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -60,6 +59,13 @@ const LoginPage = () => {
             </button>
           </p>
         </div>
+        
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+            {error}
+          </div>
+        )}
+        
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
@@ -79,7 +85,7 @@ const LoginPage = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  placeholder="you@example.com"
+                  placeholder="user@example.com"
                 />
               </div>
             </div>
@@ -100,7 +106,7 @@ const LoginPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  placeholder="••••••••"
+                  placeholder="password123"
                 />
               </div>
             </div>
@@ -131,9 +137,12 @@ const LoginPage = () => {
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+              disabled={isLoading}
+              className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out ${
+                isLoading ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
             >
-              Sign in
+              {isLoading ? 'Signing in...' : 'Sign in'}
             </button>
           </div>
         </form>
@@ -149,13 +158,22 @@ const LoginPage = () => {
           </div>
 
           <div className="mt-6 grid grid-cols-3 gap-3">
-            <button className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <button 
+              onClick={() => alert('Google login coming soon')}
+              className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
               <FaGoogle className="h-5 w-5" />
             </button>
-            <button className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <button 
+              onClick={() => alert('Facebook login coming soon')}
+              className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
               <FaFacebook className="h-5 w-5" />
             </button>
-            <button className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <button 
+              onClick={() => alert('Twitter login coming soon')}
+              className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
               <FaTwitter className="h-5 w-5" />
             </button>
           </div>

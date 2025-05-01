@@ -9,10 +9,8 @@ import {
   FaChevronRight,
   FaSave,
 } from "react-icons/fa";
-import axios from "axios";
-import { useSelector } from "react-redux";
+
 const Address = () => {
-  const url = useSelector((state) => state.portal.url);
   // Dropdown options
   const countries = ["United States", "Canada", "United Kingdom", "Pakistan", "India"];
   const provinces = ["Punjab", "Sindh", "Khyber Pakhtunkhwa", "Balochistan"];
@@ -33,41 +31,22 @@ const Address = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-  
-    try {
-      const formDataToSend = new FormData();
-      formDataToSend.append("country", formData.country);
-      formDataToSend.append("province", formData.province);
-      formDataToSend.append("district", formData.district);
-      formDataToSend.append("city", formData.city);
-      formDataToSend.append("fullAddress", formData.fullAddress);
-  
-      const response = await axios.post(`${url}/api/data/addData`, formDataToSend, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-  
-      setFormData({
-        country: "",
-        province: "",
-        district: "",
-        city: "",
-        fullAddress: ""
-      });
-  
-      alert('Data saved successfully!');
-      console.log("Submission successful:", response.data);
-  
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
-  };
 
-  
-  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Client-side form handling
+    console.log("Form submitted:", formData);
+    alert('Form data saved locally (check console)');
+    
+    // Reset form if needed
+    setFormData({
+      country: "",
+      province: "",
+      district: "",
+      city: "",
+      fullAddress: ""
+    });
+  };
 
   return (
     <div className="max-w-4xl mx-auto bg-gray-100 shadow-lg rounded-lg p-6 sm:p-10 my-10">

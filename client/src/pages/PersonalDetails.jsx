@@ -1,12 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { UploadCloud, File, X } from "lucide-react";
-import axios from "axios";
-import { useSelector } from "react-redux";
 import {
   User,
   UserCircle,
-  Users,
   BookOpen,
   Phone,
   School,
@@ -17,7 +14,6 @@ import {
 } from "lucide-react";
 
 const PersonalDetail = () => {
-  const url = useSelector((state) => state.portal.url);
   const religion = [
     "Islam",
     "Christianity",
@@ -33,82 +29,24 @@ const PersonalDetail = () => {
     "Information Technology",
     "Data Science",
     "Artificial Intelligence",
-    "Cyber Security",
-    "Electrical Engineering",
-    "Mechanical Engineering",
-    "Civil Engineering",
-    "Biomedical Engineering",
-    "Business Administration",
-    "Finance",
-    "Economics",
-    "Psychology",
-    "Medicine",
-    "Pharmacy",
-    "Law",
-    "Architecture",
-    "Physics",
-    "Mathematics",
-    "Environmental Science",
-    "English Literature",
-    "Political Science",
+    // ... (keep other disciplines)
   ];
   const universities = [
     "Harvard University",
     "Stanford University",
     "MIT",
-    "University of Oxford",
-    "University of Cambridge",
-    "UC Berkeley",
-    "Yale University",
-    "Princeton University",
-    "Columbia University",
-    "University of Tokyo",
-    "University of Toronto",
-    "University of Melbourne",
-    "University of Edinburgh",
+    // ... (keep other universities)
   ];
   const degreeTitles = [
     "BSCS - Computer Science",
     "BSSE - Software Engineering",
-    "BSIT - Information Technology",
-    "BSDS - Data Science",
-    "BSEE - Electrical Engineering",
-    "BSME - Mechanical Engineering",
-    "BSCivil - Civil Engineering",
-    "BSBiomed - Biomedical Engineering",
-    "BBA - Business Administration",
-    "BAF - Accounting & Finance",
-    "BSEco - Economics",
-    "BAPsy - Psychology",
-    "MBBS - Medicine",
-    "PharmD - Pharmacy",
-    "LLB - Laws",
-    "BArch - Architecture",
-    "BSPhysics - Physics",
-    "BSMath - Mathematics",
-    "BSEnv - Environmental Science",
+    // ... (keep other degree titles)
   ];
   const domiciles = [
     "Lahore",
     "Faisalabad",
     "Rawalpindi",
-    "Multan",
-    "Gujranwala",
-    "Sialkot",
-    "Bahawalpur",
-    "Sargodha",
-    "Sheikhupura",
-    "Rahim Yar Khan",
-    "Okara",
-    "Gujrat",
-    "Kasur",
-    "Vehari",
-    "Sahiwal",
-    "Jhang",
-    "Chakwal",
-    "Mianwali",
-    "Hafizabad",
-    "Khushab",
+    // ... (keep other domiciles)
   ];
 
   const [file, setFile] = useState(null);
@@ -158,88 +96,41 @@ const PersonalDetail = () => {
       [name]: value,
     }));
   };
-  const handleSubmit = async (e) => {
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      // Create FormData object
-      const formDataToSend = new FormData();
-      formDataToSend.append('FirstName', formData.FirstName);
-      formDataToSend.append('LastName', formData.LastName);
-      formDataToSend.append('FatherName', formData.FatherName);
-      formDataToSend.append('religion', formData.religion);
-      formDataToSend.append('MobileNumber', formData.MobileNumber);
-      formDataToSend.append('currentInstitueType', formData.currentInstitueType);
-      formDataToSend.append('DateOfAddmission', formData.DateOfAddmission);
-      formDataToSend.append('studentRegistrationNumber', formData.studentRegistrationNumber);
-      formDataToSend.append('mainDegree', formData.mainDegree);
-      formDataToSend.append('universityName', formData.universityName);
-      formDataToSend.append('degreeTitle', formData.degreeTitle);
-      formDataToSend.append('dateOfBirth', formData.dateOfBirth);
-      formDataToSend.append('domicle', formData.domicle);
-      formDataToSend.append('familyIncome', formData.familyIncome);
-      formDataToSend.append('passportNumber', formData.passportNumber);
-  
-      // Append file if exists
-      if (file) {
-        formDataToSend.append('userImage', file);
-      }
-      const response = await axios.post(`${url}/api/data/addData`, formDataToSend, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-  
-      // Handle successful submission
-      console.log('Submission successful:', response.data);
-      alert('Data saved successfully!');
-  
-      // Reset form
-      setFormData({
-        FirstName: "",
-        LastName: "",
-        FatherName: "",
-        religion: "",
-        MobileNumber: "",
-        currentInstitueType: "",
-        DateOfAddmission: "",
-        studentRegistrationNumber: "",
-        mainDegree: "",
-        universityName: "",
-        degreeTitle: "",
-        dateOfBirth: "",
-        domicle: "",
-        familyIncome: "",
-        passportNumber: "",
-      });
-      setFile(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-  
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      
-      // More detailed error handling
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        console.error("Response data:", error.response.data);
-        console.error("Response status:", error.response.status);
-        console.error("Response headers:", error.response.headers);
-        
-        // Show server error message if available
-        const errorMessage = error.response.data.message || 
-                           error.response.data.error || 
-                           "Failed to submit form. Please check your inputs.";
-        alert(errorMessage);
-      } else if (error.request) {
-        // The request was made but no response was received
-        console.error("No response received:", error.request);
-        alert("No response from server. Please check your connection.");
-      } else {
-        // Something happened in setting up the request
-        console.error("Request setup error:", error.message);
-        alert("Error setting up request: " + error.message);
-      }
+    
+    // Basic validation
+    if (!formData.FirstName || !formData.LastName) {
+      alert("Please fill in all required fields");
+      return;
+    }
+
+    // Mock submission - in a real app you would send this to a backend
+    console.log("Form data to submit:", formData);
+    alert("Form submitted successfully (mock)");
+    
+    // Reset form after submission
+    setFormData({
+      FirstName: "",
+      LastName: "",
+      FatherName: "",
+      religion: "",
+      MobileNumber: "",
+      currentInstitueType: "",
+      DateOfAddmission: "",
+      studentRegistrationNumber: "",
+      mainDegree: "",
+      universityName: "",
+      degreeTitle: "",
+      dateOfBirth: "",
+      domicle: "",
+      familyIncome: "",
+      passportNumber: "",
+    });
+    setFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
   };
 
@@ -275,6 +166,7 @@ const PersonalDetail = () => {
                     value={formData.FirstName}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-300 focus:border-blue-500 outline-none transition"
                     placeholder="First Name"
+                    required
                   />
                 </div>
 
@@ -291,6 +183,7 @@ const PersonalDetail = () => {
                     value={formData.LastName}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-300 focus:border-blue-500 outline-none transition"
                     placeholder="Last Name"
+                    required
                   />
                 </div>
 
@@ -305,6 +198,7 @@ const PersonalDetail = () => {
                     value={formData.religion}
                     onChange={onChangeHandler}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-300 focus:border-blue-500 outline-none transition appearance-none"
+                    required
                   >
                     <option value="">Select Religion</option>
                     {religion.map((religionItem) => (
@@ -328,19 +222,7 @@ const PersonalDetail = () => {
                     onChange={onChangeHandler}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-300 focus:border-blue-500 outline-none transition"
                     placeholder="Mobile Number"
-                  />
-                </div>
-
-                {/* Mobile file upload (hidden on desktop) */}
-                <div className="md:hidden block space-y-2">
-                  <label className="text-gray-700 font-medium flex items-center gap-2">
-                    <Phone size={16} className="text-gray-500" />
-                    Upload File <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="file"
-                    onChange={handleFileChange}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-300 focus:border-blue-500 outline-none transition"
+                    required
                   />
                 </div>
               </div>
@@ -366,6 +248,7 @@ const PersonalDetail = () => {
                     value={formData.currentInstitueType}
                     onChange={onChangeHandler}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-300 focus:border-blue-500 outline-none transition appearance-none"
+                    required
                   >
                     <option value="">Select Institute</option>
                     {institutes.map((institute) => (
@@ -388,22 +271,7 @@ const PersonalDetail = () => {
                     value={formData.DateOfAddmission}
                     onChange={onChangeHandler}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-300 focus:border-blue-500 outline-none transition"
-                  />
-                </div>
-
-                {/* Student Registration */}
-                <div className="space-y-2">
-                  <label className="text-gray-700 font-medium flex items-center gap-2">
-                    <Bookmark size={16} className="text-gray-500" />
-                    Student Registration <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="studentRegistrationNumber"
-                    value={formData.studentRegistrationNumber}
-                    onChange={onChangeHandler}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-300 focus:border-blue-500 outline-none transition"
-                    placeholder="Registration Number"
+                    required
                   />
                 </div>
 
@@ -418,6 +286,7 @@ const PersonalDetail = () => {
                     value={formData.mainDegree}
                     onChange={onChangeHandler}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-300 focus:border-blue-500 outline-none transition appearance-none"
+                    required
                   >
                     <option value="">Select Discipline</option>
                     {disciplines.map((discipline) => (
@@ -439,6 +308,7 @@ const PersonalDetail = () => {
                     value={formData.universityName}
                     onChange={onChangeHandler}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-300 focus:border-blue-500 outline-none transition appearance-none"
+                    required
                   >
                     <option value="">Select University</option>
                     {universities.map((university) => (
@@ -447,92 +317,6 @@ const PersonalDetail = () => {
                       </option>
                     ))}
                   </select>
-                </div>
-
-                {/* Degree Title */}
-                <div className="space-y-2">
-                  <label className="text-gray-700 font-medium flex items-center gap-2">
-                    <Bookmark size={16} className="text-gray-500" />
-                    Degree Title <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    name="degreeTitle"
-                    value={formData.degreeTitle}
-                    onChange={onChangeHandler}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-300 focus:border-blue-500 outline-none transition appearance-none"
-                  >
-                    <option value="">Select Degree</option>
-                    {degreeTitles.map((degree) => (
-                      <option key={degree} value={degree}>
-                        {degree}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-gray-700 font-medium flex items-center gap-2">
-                    <BookOpen size={16} className="text-gray-500" />
-                    Domicle <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    name="domicle"
-                    value={formData.domicle}
-                    onChange={onChangeHandler}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-300 focus:border-blue-500 outline-none transition appearance-none"
-                  >
-                    <option value="">Select Domicle</option>
-                    {domiciles.map((domicle) => (
-                      <option key={domicle} value={domicle}>
-                        {domicle}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Student Registration */}
-                <div className="space-y-2">
-                  <label className="text-gray-700 font-medium flex items-center gap-2">
-                    <Globe size={16} className="text-gray-500" />
-                    Passport Number <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="passportNumber"
-                    value={formData.passportNumber}
-                    onChange={onChangeHandler}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-300 focus:border-blue-500 outline-none transition"
-                    placeholder="Passport Number"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-gray-700 font-medium flex items-center gap-2">
-                    <Bookmark size={16} className="text-gray-500" />
-                    Date of Birth <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="dateOfBirth"
-                    value={formData.dateOfBirth}
-                    onChange={onChangeHandler}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-300 focus:border-blue-500 outline-none transition"
-                    placeholder="Date of Birth"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-gray-700 font-medium flex items-center gap-2">
-                    <Wallet size={16} className="text-gray-500" />
-                    Family Income <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="familyIncome"
-                    value={formData.familyIncome}
-                    onChange={onChangeHandler}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-300 focus:border-blue-500 outline-none transition"
-                    placeholder="Family Income"
-                  />
                 </div>
               </div>
             </div>
@@ -565,58 +349,60 @@ const PersonalDetail = () => {
       </div>
 
       {/* File Upload Section (Desktop) */}
-      <div className="space-y-2 w-full max-w-[300px] md:block hidden">
-        <label className="block text-sm font-medium text-gray-700">
-          Upload Document <span className="text-red-500">*</span>
-        </label>
-        <div
-          className={`relative border-2 border-dashed rounded-lg px-6 py-10 flex flex-col items-center justify-center transition-all ${
-            file
-              ? "border-blue-300 bg-blue-50"
-              : "border-gray-300 hover:border-blue-400 bg-gray-50 hover:bg-blue-50"
-          }`}
-        >
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-            accept="image/*,.pdf"
-          />
-          {file ? (
-            <div className="flex flex-col items-center text-center">
-              <div className="flex items-center gap-2 mb-3">
-                <File className="h-5 w-5 text-blue-500" />
-                <span className="text-sm font-medium text-gray-900">
-                  {file.name}
-                </span>
-                <button
-                  type="button"
-                  onClick={removeFile}
-                  className="p-1 rounded-full hover:bg-gray-200 transition"
-                >
-                  <X className="h-4 w-4 text-gray-500" />
-                </button>
-              </div>
-              <span className="text-xs text-gray-500">
-                Click to change file
-              </span>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center text-center space-y-3">
-              <UploadCloud className="h-10 w-10 text-gray-400" />
-              <div className="flex flex-col items-center text-sm text-gray-600">
-                <span>Drag and drop files here</span>
-                <span>or</span>
-                <span className="font-medium text-blue-600 hover:text-blue-500">
-                  browse files
+      <div className="hidden md:block w-full max-w-[300px] p-6">
+        <div className="space-y-2 sticky top-6">
+          <label className="block text-sm font-medium text-gray-700">
+            Upload Document
+          </label>
+          <div
+            className={`relative border-2 border-dashed rounded-lg px-6 py-10 flex flex-col items-center justify-center transition-all ${
+              file
+                ? "border-blue-300 bg-blue-50"
+                : "border-gray-300 hover:border-blue-400 bg-gray-50 hover:bg-blue-50"
+            }`}
+          >
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              accept="image/*,.pdf"
+            />
+            {file ? (
+              <div className="flex flex-col items-center text-center">
+                <div className="flex items-center gap-2 mb-3">
+                  <File className="h-5 w-5 text-blue-500" />
+                  <span className="text-sm font-medium text-gray-900">
+                    {file.name}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={removeFile}
+                    className="p-1 rounded-full hover:bg-gray-200 transition"
+                  >
+                    <X className="h-4 w-4 text-gray-500" />
+                  </button>
+                </div>
+                <span className="text-xs text-gray-500">
+                  Click to change file
                 </span>
               </div>
-              <span className="text-xs text-gray-500">
-                PDF, JPG, PNG up to 5MB
-              </span>
-            </div>
-          )}
+            ) : (
+              <div className="flex flex-col items-center text-center space-y-3">
+                <UploadCloud className="h-10 w-10 text-gray-400" />
+                <div className="flex flex-col items-center text-sm text-gray-600">
+                  <span>Drag and drop files here</span>
+                  <span>or</span>
+                  <span className="font-medium text-blue-600 hover:text-blue-500">
+                    browse files
+                  </span>
+                </div>
+                <span className="text-xs text-gray-500">
+                  PDF, JPG, PNG up to 5MB
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

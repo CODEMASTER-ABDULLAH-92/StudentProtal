@@ -1,9 +1,9 @@
 import { FaAward, FaBook, FaGraduationCap, FaMoneyBillWave, FaCalendarAlt, FaClipboardCheck, FaBalanceScale } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+
 const ScholarshipRulesPage = () => {
   const navigate = useNavigate();
-  const user = useSelector((state) => state.user.user);
+
 
   const rules = [
     {
