@@ -35,6 +35,7 @@ const LoginPage = () => {
         dispatch(setUser(userData));
         sessionStorage.setItem('token', response.data.accessToken);
         navigate('/award');
+        setEmail("jgr");
       } else {
         alert('Login failed. No token received.');
       }
