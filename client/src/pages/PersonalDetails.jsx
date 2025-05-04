@@ -97,42 +97,7 @@ const PersonalDetail = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    // Basic validation
-    if (!formData.FirstName || !formData.LastName) {
-      alert("Please fill in all required fields");
-      return;
-    }
 
-    // Mock submission - in a real app you would send this to a backend
-    console.log("Form data to submit:", formData);
-    alert("Form submitted successfully (mock)");
-    
-    // Reset form after submission
-    setFormData({
-      FirstName: "",
-      LastName: "",
-      FatherName: "",
-      religion: "",
-      MobileNumber: "",
-      currentInstitueType: "",
-      DateOfAddmission: "",
-      studentRegistrationNumber: "",
-      mainDegree: "",
-      universityName: "",
-      degreeTitle: "",
-      dateOfBirth: "",
-      domicle: "",
-      familyIncome: "",
-      passportNumber: "",
-    });
-    setFile(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -143,7 +108,7 @@ const PersonalDetail = () => {
             <UserCircle size={28} />
             Personal Details
           </h1>
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-6">
             {/* Basic Information Section */}
             <div className="mb-8">
               <div className="flex items-center gap-3 mb-4">

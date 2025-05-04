@@ -11,38 +11,7 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    
-    if (!email || !password) {
-      setError('Please fill in all fields');
-      return;
-    }
 
-    setIsLoading(true);
-    
-    try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Mock successful login
-      if (email === 'user@example.com' && password === 'password123') {
-        if (rememberMe) {
-          localStorage.setItem('isAuthenticated', 'true');
-        } else {
-          sessionStorage.setItem('isAuthenticated', 'true');
-        }
-        navigate('/dashboard');
-      } else {
-        setError('Invalid email or password');
-      }
-    } catch (error) {
-      setError('Login failed. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -66,7 +35,7 @@ const LoginPage = () => {
           </div>
         )}
         
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">

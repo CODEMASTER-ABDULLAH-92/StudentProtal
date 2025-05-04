@@ -12,20 +12,22 @@ import Footer from './Componnet/Footer';
 import Home from './pages/Home';
 import Cookies from "js-cookie";
 import ProtectedRoute from './pages/Protected';
+import NotFoundPage from './pages/404';
 
 
 const App = () => {
-  const token = Cookies.get("accessToken");
+  // const token = Cookies.get("accessToken");
   return (
     <div>
       <Navbar />
       <Routes>
         {/* Public Routes */}
         <Route path='/' element={<Home />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        {/* <Route path="/login" element={<LoginPage />} /> */}
+        {/* <Route path="/register" element={<RegisterPage />} /> */}
 
         {/* Protected Routes */}
+        <Route path='*' element={<NotFoundPage/>}/>
         <Route path="/award" element={<ProtectedRoute element={<ScholarshipRulesPage />} />} />
         <Route path="/personal" element={<ProtectedRoute element={<PersonalDetail />} />} />
         <Route path="/educational" element={<ProtectedRoute element={<Educational />} />} />
